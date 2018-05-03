@@ -5,9 +5,9 @@ using namespace std;
 
 #define maxnum 50//最大进程数目 
 int num,t;
-struct PCB{
+typedef struct PCB{
    char name[10]; 
-   int runtime; 
+   int All_Time; 
    int pri; //优先权 
    char state; //状态 R表示没运行完 F表示已经运行结束 
 }; 
@@ -20,7 +20,7 @@ void init()
     for(i=0;i<num;i++) 
 	{ 
         cout<<"进程"<<i+1<<":"<<"进程名 优先权 运行时间 "<<endl;
-        cin>>pcblist[i].name>>pcblist[i].pri>>pcblist[i].runtime;
+        cin>>pcblist[i].name>>pcblist[i].pri>>pcblist[i].All_Time;
 		pcblist[i].state='R';
 		getchar();
 	}
@@ -55,14 +55,14 @@ void show()
     cout<<"-------------------------------------------------"<<endl;
     for(i=0;i<num;i++) 
 	{ 
-		//cout<<pcblist[i].ID<<pcblist[i].pri<<pcblist[i].runtime<<endl;
-		printf("%s%6d%8d\n",&pcblist[i].name,pcblist[i].pri,pcblist[i].runtime);
+		//cout<<pcblist[i].ID<<pcblist[i].pri<<pcblist[i].All_Time<<endl;
+		printf("%s%6d%8d\n",&pcblist[i].name,pcblist[i].pri,pcblist[i].All_Time);
 	} 
     cout<<"开始!"<<endl;
 }
 int insert() 
 { 
-	cout<<"请输入增加的进程数目"<<endl;
+	cout<<"请增加的进程数目"<<endl;
 	int insert_num;	
 	cin>>insert_num;
 	int count=num+insert_num;
@@ -70,13 +70,13 @@ int insert()
     for(int i=num;i<count;i++) 
 	{ 
         cout<<"进程"<<i+1<<":"<<"进程名 优先权 运行时间 "<<endl;
-        cin>>pcblist[i].name>>pcblist[i].pri>>pcblist[i].runtime;
+        cin>>pcblist[i].name>>pcblist[i].pri>>pcblist[i].All_Time;
 		pcblist[i].state='R';
 		getchar();
 	}
 	for(int j=num;j<count;j++) 
 	{
-		t+=pcblist[j].runtime;		
+		t+=pcblist[j].All_Time;		
 	}
 	num=count;
 	
@@ -89,7 +89,7 @@ void run()//进程运行函数
 
     for(j=0;j<num;j++) 
 	{
-		t+=pcblist[j].runtime;		
+		t+=pcblist[j].All_Time;		
 	}
 		cout<<endl<<"初态为"<<endl; 
         show(); 
@@ -105,15 +105,14 @@ void run()//进程运行函数
 					if(pcblist[i].state=='n') //
 					{  
 						pcblist[i].pri-=1; 
-						pcblist[i].runtime--;
+						pcblist[i].All_Time--;
 						{
-							if(pcblist[i].runtime==0) 
+							if(pcblist[i].All_Time==0) 
                                 pcblist[i].state='F'; 
 							else 
-							{	
-							pcblist[i].state='R'; 
-							num--;
-							} 
+							{
+								pcblist[i].state='R'; 
+								num--;
 						}
                         show(); 
 						getchar();
