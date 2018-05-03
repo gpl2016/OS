@@ -6,7 +6,8 @@ typedef struct PNode{
 	char name[10]; 
 	int All_Time; 
 	int Runed_Time; 
-    char state; 
+    char state;
+	int end_flag; 
 }*Proc; 
 
 int ProcNum,insert_num; //进程数量 
@@ -22,33 +23,64 @@ void InitPCB(Proc &H)//创建进程
     while(Num--) 
 	{   
 		p=p->next=(Proc)malloc(sizeof(PNode)); 
-		cout<<"进程名 所需花费总时间 已经运行时间"<<endl;
-		cin>>p->name>>p->All_Time>>p->Runed_Time;
+		cout<<"进程名 所需花费总时间 已经运行时间 是否为最后一个输入的进程(0/1)"<<endl;
+		cin>>p->name>>p->All_Time>>p->Runed_Time>>p->end_flag;
 		p->state='R';
 		p->next=NULL;
 	}
     p->next=H->next;
 }
-void insert_InitPCB(Proc &H)//增加进程 
+
+//循环单链表的遍历  
+void insert_InitPCB(Proc &H)  
 {  
-	cout<<"请输入增加进程数量:";
+    Proc pHead = H->next;   //pHead指向头结点  
+    Proc p = pHead->next;   //p指向首节点，第一个有效节点  
+  
+    while(p != pHead)  //循环链表的终止条件:（p != 头指针）  
+    {  
+       // printf("%d ", p->data);  
+        p = p->next;  
+    } 
+	cout<<"请输入进程数量:";
 	cin>>insert_num;
-	ProcNum+=insert_num;
-	int Num=insert_num;//ProcNum; 
-    //H=(Proc)malloc(sizeof(PNode)); 
+	int Num=insert_num; 
+	ProcNum+=insert_num; 
+ //   H=(Proc)malloc(sizeof(PNode)); 
 //	H->next=NULL;
-    Proc p=(Proc)malloc(sizeof(PNode)); 
+  //  Proc p=H;  
     cout<<"请按格式输入进程信息:\n"; 
     while(Num--) 
-	{ 
+	{   
 		p=p->next=(Proc)malloc(sizeof(PNode)); 
-		cout<<"进程名 所需花费总时间 已经运行时间"<<endl;
-		cin>>p->name>>p->All_Time>>p->Runed_Time;
+		cout<<"进程名 所需花费总时间 已经运行时间 是否为最后一个输入的进程(0/1)"<<endl;
+		cin>>p->name>>p->All_Time>>p->Runed_Time>>p->end_flag;
 		p->state='R';
 		p->next=NULL;
 	}
     p->next=H->next;
-}
+  
+}  
+//void insert_InitPCB(Proc &H)//增加进程 
+//{  
+//	cout<<"请输入增加进程数量:";
+//	cin>>insert_num;
+//	ProcNum+=insert_num;
+//	int Num=insert_num;//ProcNum; 
+//    //H=(Proc)malloc(sizeof(PNode)); 
+////	H->next=NULL;W
+//    Proc p=(Proc)malloc(sizeof(PNode)); 
+//    cout<<"请按格式输入进程信息:\n"; 
+//    while(Num--) 
+//	{ 
+//		p=p->next=(Proc)malloc(sizeof(PNode)); 
+//		cout<<"进程名 所需花费总时间 已经运行时间"<<endl;
+//		cin>>p->name>>p->All_Time>>p->Runed_Time;
+//		p->state='R';
+//		p->next=NULL;
+//	}
+//    p->next=H->next;
+//}
 void DispInfo(Proc H)//进程运行输出内容 
 {
 	Proc p=H->next; 
@@ -75,16 +107,19 @@ void SJP_Simulator(Proc &H)
         p->Runed_Time++;
 		DispInfo(H); 
 	//	system("pause");
-		cout<<"如果需要增加进程请输入i"<<endl; 
-		char c=getchar();
-		if(c=='i')
-		insert_InitPCB(H); 
+		
 		if(p->All_Time == p->Runed_Time)
 		{
 			p->state='E';
 			flag--;
 			cout<<p->name<<"进程结束,删除该进程!\n";
 		}
+		
+		
+		cout<<"如果需要增加进程请输入i"<<endl; 
+		char c=getchar();
+		if(c=='i')
+		insert_InitPCB(H); 
 		p=p->next;
         while(flag && p->All_Time == p->Runed_Time)
 			p=p->next;

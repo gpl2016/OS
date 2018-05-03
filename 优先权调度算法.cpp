@@ -26,7 +26,7 @@ void init()
 	}
 }
 
-int max_pri_process()  
+int max_pri_process()  //最大优先级？ 
 {
 	int max=-100; 
 	int i;  
