@@ -113,9 +113,7 @@ void SJP_Simulator(Proc &H,Proc &t) {
 /************************************************************
 ************************************************************* 
 ************************************************************* 
-
 优先权调度算法 
-
 **************************************************************** 
 ***************************************************************** 
 *****************************************************************/ 
@@ -135,7 +133,7 @@ int max_pri_process()
 {
 	int max=-100; 
 	int i;  
-	int key; //key表示当前优先权最高的进程的num 
+	int key=0; //key表示当前优先权最高的进程的num 
     for(i=0;i<num;i++) 
 	{
 		if(pcblist[i].state=='n')   
@@ -160,7 +158,7 @@ void show()
     cout<<"-------------------------------------------------"<<endl;
     for(i=0;i<num;i++) 
 	{ 
-		//cout<<pcblist[i].ID<<pcblist[i].pri<<pcblist[i].All_Time<<endl;
+	    if(pcblist[i].state!='F')
 		printf("%s%6d%8d\n",&pcblist[i].name,pcblist[i].pri,pcblist[i].All_Time);
 	} 
     cout<<"开始!"<<endl;
@@ -185,10 +183,10 @@ int insert()
 	}
 	num=count;
 	
-	
+	return 0;
 }
 
-void run()//进程运行函数 
+void dp_run()//动态优先权运行函数 
 {
 	int i,j; 
 
@@ -198,7 +196,7 @@ void run()//进程运行函数
 	}
 		cout<<endl<<"初态为"<<endl; 
         show(); 
-	//	getchar(); 
+	    getchar(); 
         for(j=0;j<t;j++) 
 		{
 			while(max_pri_process()!=-1)//置当前优先权最高的进程state为n 
@@ -213,25 +211,26 @@ void run()//进程运行函数
 						pcblist[i].All_Time--;
 						{
 							if(pcblist[i].All_Time==0) 
-                                pcblist[i].state='F'; 
+                               { pcblist[i].state='F'; 
+                               	cout<<"进程"<<pcblist[i].name<<"运行结束，已经删除"<<endl; 
+                               } 
 							else 
-							{	
 							pcblist[i].state='R'; 
-							num--;
-							} 
 						}
                         show(); 
-						getchar();
+					//	getchar();
 						cout<<"如果需要增加进程请输入i,否则输入c"<<endl; 
 						char m;
-						cin >> m;
+						cin>>m;
 						if (m == 'i')
 						insert();
+					
 					}
 				}
 		}
+		cout<<"线上进程已全部运行完毕"<<endl; 
 }
-void run2()//进程运行函数 
+void run()//静态
 {
 	int i,j; 
 
@@ -241,7 +240,7 @@ void run2()//进程运行函数
 	}
 		cout<<endl<<"初态为"<<endl; 
         show(); 
-	//	getchar(); 
+	    getchar(); 
         for(j=0;j<t;j++) 
 		{
 			while(max_pri_process()!=-1)//置当前优先权最高的进程state为n 
@@ -252,27 +251,27 @@ void run2()//进程运行函数
 				{
 					if(pcblist[i].state=='n') //
 					{  
-						//pcblist[i].pri-=1; 
 						pcblist[i].All_Time--;
 						{
 							if(pcblist[i].All_Time==0) 
-                                pcblist[i].state='F'; 
+                               { pcblist[i].state='F'; 
+                               	cout<<"进程"<<pcblist[i].name<<"运行结束，已经删除"<<endl; 
+                               } 
 							else 
-							{	
 							pcblist[i].state='R'; 
-							num--;
-							} 
 						}
                         show(); 
-						getchar();
+					//	getchar();
 						cout<<"如果需要增加进程请输入i,否则输入c"<<endl; 
 						char m;
-						cin >> m;
+						cin>>m;
 						if (m == 'i')
 						insert();
+					
 					}
 				}
 		}
+		cout<<"线上进程已全部运行完毕"<<endl; 
 }
 /**********************************************************************/  
 /*                                                                    */  
@@ -292,7 +291,7 @@ void dp_pri()
 	cout<<"请输入进程数目"<<endl;
 	cin>>num; 	
 	init(); 
-	run();		
+	dp_run();	//动态	
 } 
 
 void pri()
@@ -300,7 +299,7 @@ void pri()
 	cout<<"请输入进程数目"<<endl;
 	cin>>num; 	
 	init(); 
-	run2();		
+	run();	//静态	
 } 
 
 /**********************************************************************/  
@@ -320,12 +319,10 @@ int main()
 	{
 	
 	case 1:	time();break;		
-	case 2: dp_pri();break;
-	case 3: pri();break;
+	case 2: pri();break;
+	case 3: dp_pri();break;
 		
 	} 
 	return 0;	
 
 }
-
-
